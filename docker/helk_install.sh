@@ -303,7 +303,7 @@ set_kibana_ui_password() {
     echo "$HELK_INFO_TAG Please make sure to create a custom Kibana password and store it securely for future use."
     sleep 1
     while true; do
-      read -t 90 -p "$HELK_INFO_TAG Set HELK Kibana UI Password: " -e -i "hunting" KIBANA_UI_PASSWORD_INPUT
+      read -t 5 -p "$HELK_INFO_TAG Set HELK Kibana UI Password: " -e -i "hunting" KIBANA_UI_PASSWORD_INPUT
       READ_INPUT=$?
       KIBANA_UI_PASSWORD_INPUT=${KIBANA_UI_PASSWORD_INPUT:-"hunting"}
       if [ $READ_INPUT = 142 ]; then
@@ -353,7 +353,7 @@ set_network() {
     esac
     # *********** Accepting Defaults or Allowing user to set the HELK IP ***************
     local ip_choice
-    read -t 90 -p "$HELK_INFO_TAG Set HELK IP. Default value is your current IP: " -e -i "${HOST_IP}" ip_choice
+    read -t 5 -p "$HELK_INFO_TAG Set HELK IP. Default value is your current IP: " -e -i "${HOST_IP}" ip_choice
     # ******* Validation ************
     READ_INPUT=$?
     HOST_IP="${ip_choice:-$HOST_IP}"
@@ -395,45 +395,40 @@ set_helk_build() {
       echo " "
 
       local CONFIG_CHOICE
-      read -t 30 -p "Enter build choice [ 1 - 4]: " -e -i "1" CONFIG_CHOICE
-      READ_INPUT=$?
+      read -t 5 -p "Enter build choice [ 1 - 4]: " -e -i "4" CONFIG_CHOICE
+      CONFIG_CHOICE=3
       HELK_BUILD=${CONFIG_CHOICE:-"helk-kibana-analysis"}
-      if [ $READ_INPUT = 142 ]; then
-        echo -e "\n$HELK_INFO_TAG HELK build set to ${HELK_BUILD}"
-        break
-      else
-        echo "$HELK_INFO_TAG HELK build set to ${HELK_BUILD}"
-        case $CONFIG_CHOICE in
-                    1) HELK_BUILD='helk-kibana-analysis';break;;
-                    2) HELK_BUILD='helk-kibana-analysis-alert';break;;
-        3)
-          if [[ $AVAILABLE_MEMORY -le $INSTALL_MINIMUM_MEMORY_NOTEBOOK ]]; then
-            echo "$HELK_INFO_TAG Your available memory for HELK build option ${HELK_BUILD} is not enough."
-            echo "$HELK_INFO_TAG Minimum required for this build option is $INSTALL_MINIMUM_MEMORY_NOTEBOOK MBs."
-            echo "$HELK_INFO_TAG Please Select option 1 or re-run the script after assigning the correct amount of memory"
-            sleep 4
-          else
-            HELK_BUILD='helk-kibana-notebook-analysis'
-                        break;
-          fi
-          ;;
-        4)
-          if [[ $AVAILABLE_MEMORY -le $INSTALL_MINIMUM_MEMORY_NOTEBOOK ]]; then
-            echo "$HELK_INFO_TAG Your available memory for HELK build option ${HELK_BUILD} is not enough."
-            echo "$HELK_INFO_TAG Minimum required for this build option is $INSTALL_MINIMUM_MEMORY_NOTEBOOK MBs."
-            echo "$HELK_INFO_TAG Please Select option 1 or re-run the script after assigning the correct amount of memory"
-            sleep 4
-          else
-            HELK_BUILD='helk-kibana-notebook-analysis-alert'
-                        break;
-          fi
-          ;;
-        *)
-          echo -e "${RED}Error...${STD}"
-          echo "$HELK_ERROR_TAG Not a valid build"
-          ;;
-        esac
-      fi
+      echo "$HELK_INFO_TAG HELK build set to ${HELK_BUILD}"
+      case $CONFIG_CHOICE in
+                  1) HELK_BUILD='helk-kibana-analysis';break;;
+                  2) HELK_BUILD='helk-kibana-analysis-alert';break;;
+      3)
+        if [[ $AVAILABLE_MEMORY -le $INSTALL_MINIMUM_MEMORY_NOTEBOOK ]]; then
+          echo "$HELK_INFO_TAG Your available memory for HELK build option ${HELK_BUILD} is not enough."
+          echo "$HELK_INFO_TAG Minimum required for this build option is $INSTALL_MINIMUM_MEMORY_NOTEBOOK MBs."
+          echo "$HELK_INFO_TAG Please Select option 1 or re-run the script after assigning the correct amount of memory"
+          sleep 4
+        else
+          HELK_BUILD='helk-kibana-notebook-analysis'
+                      break;
+        fi
+        ;;
+      4)
+        if [[ $AVAILABLE_MEMORY -le $INSTALL_MINIMUM_MEMORY_NOTEBOOK ]]; then
+          echo "$HELK_INFO_TAG Your available memory for HELK build option ${HELK_BUILD} is not enough."
+          echo "$HELK_INFO_TAG Minimum required for this build option is $INSTALL_MINIMUM_MEMORY_NOTEBOOK MBs."
+          echo "$HELK_INFO_TAG Please Select option 1 or re-run the script after assigning the correct amount of memory"
+          sleep 4
+        else
+          HELK_BUILD='helk-kibana-notebook-analysis-alert'
+                      break;
+        fi
+        ;;
+      *)
+        echo -e "${RED}Error...${STD}"
+        echo "$HELK_ERROR_TAG Not a valid build"
+        ;;
+      esac
     done
   fi
 }
@@ -469,7 +464,7 @@ prepare_helk() {
         echo "$HELK_ERROR_TAG YOU DO NOT HAVE ENOUGH DOCKER DISK SPACE ASSIGNED"
         echo "$HELK_ERROR_TAG Available Docker Disk: ${AVAILABLE_DOCKER_DISK} GBs"
         echo -e "$INSTALL_ERROR_CHECK_WIKI"
-        exit 1
+        #exit 1
       fi
     else
       install_docker
