@@ -396,7 +396,7 @@ set_helk_build() {
 
       local CONFIG_CHOICE
       read -t 5 -p "Enter build choice [ 1 - 4]: " -e -i "4" CONFIG_CHOICE
-      CONFIG_CHOICE=3
+      CONFIG_CHOICE=4
       HELK_BUILD=${CONFIG_CHOICE:-"helk-kibana-analysis"}
       echo "$HELK_INFO_TAG HELK build set to ${HELK_BUILD}"
       case $CONFIG_CHOICE in
