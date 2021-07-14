@@ -302,25 +302,28 @@ set_kibana_ui_password() {
   if [[ -z "$KIBANA_UI_PASSWORD_INPUT" ]]; then
     echo "$HELK_INFO_TAG Please make sure to create a custom Kibana password and store it securely for future use."
     sleep 1
-    while true; do
-      read -t 5 -p "$HELK_INFO_TAG Set HELK Kibana UI Password: " -e -i "hunting" KIBANA_UI_PASSWORD_INPUT
-      READ_INPUT=$?
-      KIBANA_UI_PASSWORD_INPUT=${KIBANA_UI_PASSWORD_INPUT:-"hunting"}
-      if [ $READ_INPUT = 142 ]; then
-        echo -e "\n$HELK_INFO_TAG HELK Kibana UI password set to ${KIBANA_UI_PASSWORD_INPUT}"
-        break
-      else
-        read -p "$HELK_INFO_TAG Verify HELK Kibana UI Password: " KIBANA_UI_PASSWORD_INPUT_VERIFIED
+    KIBANA_UI_PASSWORD_INPUT="hunting"
+    #while true; do
+      #read -t 5 -p "$HELK_INFO_TAG Set HELK Kibana UI Password: " -e -i "hunting" KIBANA_UI_PASSWORD_INPUT
+      #READ_INPUT=$?
+      #KIBANA_UI_PASSWORD_INPUT=${KIBANA_UI_PASSWORD_INPUT:-"hunting"}
+      #KIBANA_UI_PASSWORD_INPUT="hunting"
+      #if [ $READ_INPUT = 142 ]; then
+        #echo -e "\n$HELK_INFO_TAG HELK Kibana UI password set to ${KIBANA_UI_PASSWORD_INPUT}"
+        #break
+      #else
+        #read -p "$HELK_INFO_TAG Verify HELK Kibana UI Password: " KIBANA_UI_PASSWORD_INPUT_VERIFIED
         #echo -e "$HELK_INFO_TAG HELK Kibana UI password set to ${KIBANA_UI_PASSWORD_INPUT}"
         # *********** Validating Password Input ***************
-        if [[ "$KIBANA_UI_PASSWORD_INPUT" == "$KIBANA_UI_PASSWORD_INPUT_VERIFIED" ]]; then
-          break
-        else
-          echo -e "${RED}Error...${STD}"
-          echo "$HELK_INFO_TAG Your password values do not match.."
-        fi
-      fi
-    done
+        #if [[ "$KIBANA_UI_PASSWORD_INPUT" == "$KIBANA_UI_PASSWORD_INPUT_VERIFIED" ]]; then
+          #break
+        #else
+          #echo -e "${RED}Error...${STD}"
+          #echo "$HELK_INFO_TAG Your password values do not match.."
+        #fi
+      #fi
+    #done
+    echo -e "\n$HELK_INFO_TAG HELK Kibana UI password set to ${KIBANA_UI_PASSWORD_INPUT}"
   fi
   if [[ $SUBSCRIPTION_CHOICE == "basic" ]]; then
     # *********** Check if htpasswd is installed ***************
@@ -353,15 +356,16 @@ set_network() {
     esac
     # *********** Accepting Defaults or Allowing user to set the HELK IP ***************
     local ip_choice
-    read -t 5 -p "$HELK_INFO_TAG Set HELK IP. Default value is your current IP: " -e -i "${HOST_IP}" ip_choice
+    #read -t 5 -p "$HELK_INFO_TAG Set HELK IP. Default value is your current IP: " -e -i "${HOST_IP}" ip_choice
     # ******* Validation ************
-    READ_INPUT=$?
-    HOST_IP="${ip_choice:-$HOST_IP}"
-    if [ $READ_INPUT  = 142 ]; then
-        echo -e "\n$HELK_INFO_TAG HELK IP set to ${HOST_IP}"
-    else
-        echo "$HELK_INFO_TAG HELK IP set to ${HOST_IP}"
-    fi
+    #READ_INPUT=$?
+    #HOST_IP="${ip_choice:-$HOST_IP}"
+    #if [ $READ_INPUT  = 142 ]; then
+    #    echo -e "\n$HELK_INFO_TAG HELK IP set to ${HOST_IP}"
+    #else
+    #    echo "$HELK_INFO_TAG HELK IP set to ${HOST_IP}"
+    #fi
+    echo "$HELK_INFO_TAG HELK IP set to ${HOST_IP}"
   fi
 }
 
@@ -395,7 +399,7 @@ set_helk_build() {
       echo " "
 
       local CONFIG_CHOICE
-      read -t 5 -p "Enter build choice [ 1 - 4]: " -e -i "4" CONFIG_CHOICE
+      #read -t 5 -p "Enter build choice [ 1 - 4]: " -e -i "4" CONFIG_CHOICE
       CONFIG_CHOICE=4
       HELK_BUILD=${CONFIG_CHOICE:-"helk-kibana-analysis"}
       echo "$HELK_INFO_TAG HELK build set to ${HELK_BUILD}"
